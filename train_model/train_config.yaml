@@ -1,0 +1,29 @@
+# -------------------- base_path config --------------------
+log_dir: './training/logs'
+checkpoint_dir: './training/checkpoints'
+tensorboard_dir: './training/tensorboard'
+valid_dir: './training/valid_data'
+
+# -------------------- hyperparamters config --------------------
+network: 'Unet'
+checkpoint: 
+learning_rate: 0.0001
+weight_decay: 0.00001
+criterion: 'l1'
+optimizer: 'adam'
+lr_scheduler: 'cosine'
+train_batch_size: 64
+train_epochs: 500
+train_num_workers: 1
+valid_batch_size: 1
+valid_num_workers: 1
+print_step: 100
+seed: 2023
+
+# -------------------- bool type setting--------------------
+use_quant: False # maybe error for torch.fx
+use_tensorboard: True
+use_summarywriter: True
+use_lr_scheduler: True
+use_warm_up: True
+use_logger: True

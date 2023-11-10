@@ -1,0 +1,14 @@
+# -------------------- base config --------------------
+network: 'Unet'
+ckpt_path: '/mnt/code/AISP_NR/train_model/training/checkpoints/Unet_best_ckpt.pth'
+onnx_path:  '/mnt/code/AISP_NR/infer_model/onnx/Unet_simplify.onnx'
+tensorrt_path: '/mnt/code/AISP_NR/infer_model/tensorrt/Unet.engine'
+
+input_shape :
+            - 1
+            - 4
+            - 128
+            - 128
+use_qtorch: False
+# -------------------- forward engine setting--------------------
+forward_engine: 'trt'  ## must be in ['trt', 'onnx', 'torch']
