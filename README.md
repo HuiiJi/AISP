@@ -245,7 +245,7 @@ bash ./run.sh
 ```python
   python ./infer_model/inference.py
 ```
-![pipe](assets/Unet_simplify_onnx.png)
+![pipe](assets/Unet_simplify.onnx.png)
 同样，在你运行`./infer_model/inference.py`之前，请先配置`./infer_model/infer_config.yaml`文件，配置文件如下所示。
 ```yaml
 # -------------------- base config --------------------
