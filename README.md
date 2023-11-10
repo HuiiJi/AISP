@@ -108,7 +108,7 @@ AI降噪模型开发的第一步也是非常重要的一步，数据采集，训
   标签图即干净的RAW图，可以通过以下方式获得：
     - 用目标camera采集一组低ISO、长曝光的RAW图，如ISO100，曝光时间为1s。
     - 用目标camera采集一组静止多帧的RAW图，如ISO100，曝光时间为1/10s，采集帧数为100，通过求平均得到干净的RAW图。
-    - 用开源数据集中的GT作标签，但需要对一些脏数据做一些传统滤波处理，本文采取该方式进行标签图像采集（已附带5张4k的GT-RAW作为参考，位于`./train_data/gt_img`目录下）。
+    - 用开源数据集中的GT作标签，但需要对一些脏数据做一些传统滤波处理，本文采取该方式进行标签图像采集，完整数据链接请参考`./IMX766/data_here.txt`的内容进行下载。
 
 - ##### 应用噪声模型
 应用噪声模型时需注意ISO是可调的超参，尽可能广泛选取大范围的ISO来模拟高动态的噪声分布（如ISO100~6400）。
@@ -241,10 +241,11 @@ bash ./run.sh
 #### 4.1 量化及推理
 对训练时FP32的模型进行量化有很多好处，如降低推理功耗、提高计算速度、减少内存和存储占用等。模型量化的对象为weights和act的FP32->INT8（即W8A8）。采用PTQ量化，入口文件为`./train_model/run.sh`，即已包含`./train_model/train.py`，通过配置文件的`use_quant：True`来选择是否fx量化，默认为False。
 **torch.fx量化后的模型为int8，但仅支持x86上INT8指令集的加速推理，若要实现GPU推理，可以考虑torch->onnx->tensorrt。**
-可以通过如下code来实现torch->onnx->trt的量化。
+可以通过如下code来实现torch->onnx->trt的量化，Unet的onnx可视化如下图。
 ```python
   python ./infer_model/inference.py
 ```
+![pipe](assets/Unet_simplify_onnx.png)
 同样，在你运行`./infer_model/inference.py`之前，请先配置`./infer_model/infer_config.yaml`文件，配置文件如下所示。
 ```yaml
 # -------------------- base config --------------------
