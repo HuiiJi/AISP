@@ -115,7 +115,7 @@ AI降噪模型开发的第一步也是非常重要的一步，数据采集，训
 ![pipe](assets/noise1.jpg)
 ![pipe](assets/noise2.jpg)
 > * 本实验选取ISO1000~6400来对每个patch加噪声得到与目标camera噪声分布匹配的带噪图，如图所示。 
-> * 加噪声需要经过一些归一化、pack等操作，该部分code可参考[./utils/tools.py](utils/tools.py)。
+> * 加噪声需要经过一些归一化、pack等操作，该部分code可参考`./utils/tools.py](utils/tools.py)。
 
 - ##### 制作训练集和验证集
 为了加速训练集的数据读取以提高训练效率，本实验采用LMDB格式存储数据，通过运行以下code，可以将数据集转换为LMDB格式。
