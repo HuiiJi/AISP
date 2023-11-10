@@ -93,7 +93,7 @@ AI降噪模型开发的第一步也是非常重要的一步，数据采集，训
   3. 不同ISO下的ROI均值作横轴，方差作纵轴，拟合一次函数得到斜率和截距，得到Poisson-Gaussian噪声模型中参数k和sigma，如下图所示。
       ![pipe](assets/curve.jpg)
   4. 拟合ISO和k及ISO和sigma的关系，得到噪声模型的参数配置文件。
-  5. 通过噪声模型参数配置文件，可以得到任意ISO下的噪声模型参数，从而可以合成匹配数据，该部分的code可参考`/utils/noise_profile.py`
+  5. 通过噪声模型参数配置文件，可以得到任意ISO下的噪声模型参数，从而可以合成匹配数据，该部分的code可参考`/utils/noise_profile.py`。
   6. 由于已提前进行上述帧采集操作，通过运行以下code来直接生成配置文件。
 
      ```python
