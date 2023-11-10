@@ -1,5 +1,5 @@
 # AI_NR:  2D AI-Noise Reduction for RAW Images
-![pipe](assets/nr-pipe.png)
+![pipe](assets/pipe.png)
 ## 介绍
 这是一个关于AI_ISP模块：Noise Reduction 的工程文档，针对目标camera如（sensor：IMX766）梳理AI降噪的工程实现流程，该项目包含：数据准备、模型设计、模型训练、模型压缩、模型推理等。请先确保安装该项目的依赖项，通过git clone下载该项目，然后在该项目的根目录下执行以下命令安装依赖项。
 
