@@ -9,7 +9,7 @@ cd AISP_NR
 pip install -r requirements.txt
 
 ```
-## 0. 项目结构
+## 0. 文件树
 ```shell
 ├── assets
 ├── IMX766
