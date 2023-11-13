@@ -283,6 +283,10 @@ forward_engine: 'trt'  ## must be in ['trt', 'onnx', 'torch']
 ![pipe](assets/demo2.jpg)
 > *Tips: 降噪后的图像质量有提高的空间，如降低图像的涂抹感，保持局部纹理一致性，恢复部分细节等，该部分trick可以通过对训练集进行增强或更改训练策略来实现，该文档不进一步讨论。*
 
+## 后记
+- AISP的用途是逐步取代传统ISP链条上一些难以优化的模块如NR、HDR，以实现人眼观感提升或机器视觉指标的特定优化。
+- 当前主流的方案是用AISP和传统算法共同作用于一个模块来保证其稳定性，也有一些paper希望用一个Network来实现整个ISP Pipe的替代，但目前还存在无法合理tuning及不稳定等缺陷。
+- AISP model的应用通常是针对特定嵌入式硬件来将PC端侧的推理框架（如torch、tensorflow）转为平台自研的推理框架来实现OP的一一映射，中间可以会存在某些OP的优化和改写以实现良好的部署效果，所以也能接触一些硬件架构学习和部署相关的概念，个人认为有良好的学习前景，共勉！
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
