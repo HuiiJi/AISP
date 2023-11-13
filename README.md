@@ -1,14 +1,15 @@
 # AISP_NR:  2D AI-Noise Reduction for RAW Images
 ![pipe](assets/pipe.png)
 ## 介绍
-这是一个关于AISP模块：Noise Reduction 的工程文档，针对目标camera如（sensor：IMX766）梳理AI降噪的工程实现流程，该项目包含：数据准备、模型设计、模型训练、模型压缩、模型推理等。请先确保安装该项目的依赖项，通过git clone下载该项目，然后在该项目的根目录下执行以下命令安装依赖项。
+这是一个关于AISP模块：Noise Reduction 的工程实现文档，针对目标camera如（sensor：IMX766）梳理AI降噪的实现流程，该项目包含：数据准备、模型设计、模型训练、模型压缩、模型推理等。该文档全文约10000字，阅读时间约20min。请先确保安装该项目的依赖项，通过git clone下载该项目，然后在该项目的根目录下执行以下命令安装依赖项。
 
 ```shell
 git clone git@github.com:HuiiJi/AISP_NR.git
 cd AISP_NR
-pip install -r requirements.txt
-
+docker pull nvcr.io/nvidia/pytorch:21.08-py3
+docker run -it --gpus all -v /mnt:/mnt nvcr.io/nvidia/pytorch:21.08-py3 #/mnt为你的数据存储路径
 ```
+> *Tips: 该项目的依赖项包括pytorch、torchvision、numpy、opencv-python、pyyaml、tensorboard、torchsummary、torchsummaryX、torch2trt、onnx、onnxruntime等，你可以通过docker pull来下载镜像images并启动容器container来完成环境配置，docker的安装请参考[官方文档](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)。*
 ## 0. 文件树
 ```shell
 ├── assets
@@ -115,7 +116,7 @@ AI降噪模型开发的第一步也是非常重要的一步，数据采集，训
 ![pipe](assets/noise1.jpg)
 ![pipe](assets/noise2.jpg)
 > * 本实验选取ISO1000~6400来对每个patch加噪声得到与目标camera噪声分布匹配的带噪图，如图所示。 
-> * 加噪声需要经过一些归一化、pack等操作，该部分code可参考`./utils/tools.py](utils/tools.py)。
+> * 加噪声需要经过一些归一化、pack等操作，该部分code可参考`./utils/tools.py`。
 
 - ##### 制作训练集和验证集
 为了加速训练集的数据读取以提高训练效率，本实验采用LMDB格式存储数据，通过运行以下code，可以将数据集转换为LMDB格式。
@@ -159,19 +160,19 @@ AI降噪模型来源可以通过历年的NTIRE竞赛或者图像视觉会议（�
   - *数据预处理可以选择一些已经被验证有效的数据增强策略（如随机裁剪、随机旋转、随机翻转等）。*
   - *训练可以选择一些已经被验证有效的学习率策略（如warmup）。*
 - ##### 自研模型的结构
-基于以上经验，可以参考一些Unet类的结构来设计模型，基本组件为ResnetBlock2D和SelfAttnBlock2D，其中SelfAttnBlock2D选择Transformer来实现注意力模块，ResnetBlock2D选择C+R和residual等结构，详细的模型结构如下图所示。
+基于以上经验，可以参考一些Unet类的结构来设计模型，基本组件为ResnetBlock2D和SelfAttnBlock2D，其中SelfAttnBlock2D选择Transformer来实现注意力模块，ResnetBlock2D选择C+R和residual等结构，详细的模型结构如下图所示。其中模型的源码位于`./model_zoo/My_network.py`下，该模型结构仅供参考。
 ![network](assets/My_network.jpg)
- > *Tips：其中模型的源码位于`./model_zoo/My_network.py`下，该模型结构仅供参考。*
+ > *Tips：针对2D NR可以考虑设置超参模式来控制去噪强度如（FFDNet系列），如将ISO作为先验输入network进行处理以实现非盲去噪（可以参考Stable diffusion的Unet设计ResnetBlock2D）。*
 - ##### 典型模型的参数
-  |Model|PSNR| SSIM| FLOPs|
+  |Model|PSNR| SSIM| Macs|
   |:----|:------:|:---:|:--:|
   |MPRNet|43.133|0.979|8300 G|
   |UNet|43.577|0.985|439 G|
   |PMRID|42.967|0.981|37 G|
   |NAFNet|-|-|2109 G|
   |CycleISP|43.512|0.991|2653 G|
-  |Restormer|45.133|0.989|8300 G|
- > *Tips：PSNR和SSIM在ZTE验证集上的表现可以作为参考，其中FLOPs是FP32@1080P的推理量。*
+  |Restormer|45.133|0.989|5400 G|
+ > *Tips：PSNR和SSIM在ZTE验证集上的表现可以作为参考，其中Macs是FP32@1080P的推理量。*
 
 ## 3. 模型训练及验证
 本节实现AI model的训练和验证，测试其在验证集的表现。训练前请先确保你已经生成了训练集和验证集，如果没有，请参考[数据准备](#1-数据准备)一节。
@@ -253,7 +254,6 @@ network: 'Unet'
 ckpt_path: '/mnt/code/AISP_NR/train_model/training/checkpoints/Unet_best_ckpt.pth'
 onnx_path:  '/mnt/code/AISP_NR/infer_model/onnx/Unet_simplify.onnx'
 tensorrt_path: '/mnt/code/AISP_NR/infer_model/tensorrt/Unet.engine'
-
 input_shape :
             - 1
             - 4
@@ -280,6 +280,7 @@ forward_engine: 'trt'  ## must be in ['trt', 'onnx', 'torch']
 ```
 输出图例如下所示。
 ![pipe](assets/demo.jpg)
+![pipe](assets/demo2.jpg)
 > *Tips: 降噪后的图像质量有提高的空间，如降低图像的涂抹感，保持局部纹理一致性，恢复部分细节等，该部分trick可以通过对训练集进行增强或更改训练策略来实现，该文档不进一步讨论。*
 
 
