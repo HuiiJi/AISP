@@ -114,8 +114,10 @@ AI降噪模型开发的第一步也是非常重要的一步，数据采集，训
 
 - ##### 应用噪声模型
 应用噪声模型时需注意ISO是可调的超参，尽可能广泛选取大范围的ISO来模拟高动态的噪声分布（如ISO100~6400）。
+
 ![pipe](assets/noise1.jpg)
 ![pipe](assets/noise2.jpg)
+
 > * 本实验选取ISO1000~6400来对每个patch加噪声得到与目标camera噪声分布匹配的带噪图，如图所示。 
 > * 加噪声需要经过一些归一化、pack等操作，该部分code可参考`./utils/tools.py`。
 
@@ -232,11 +234,15 @@ bash ./run.sh
 对验证集进行测试来评估训练表现，code包含在`./train_model/train.py`中，会在训练自动启动验证。
 - 权重会保存在`./train_model/training/checkpoints`文件夹下，其中`xx_best.pth`为最优权重，`xx_last.pth`为最后一次训练的权重，默认不保存最后一次训练权重。
 - log会保存在`./train_model/training/log`文件夹下，打印详细的时间、训练step和loss等，如下图所示。
+- 
 ![pipe](assets/log.jpg)
+
 - tensorboard文件会保存在`./train_model/training/tensorboard`文件夹下，存储loss/iteration、PSNR、SSIM等验证时状态，如下图所示。
+- 
 ![pipe](assets/tensorboard1.jpg)
 ![pipe](assets/tensorboard2.jpg)
 ![pipe](assets/tensorboard3.jpg)
+
 > *Tips: tensorboard需要打开浏览器才能查看，你可以通过`tensorboard --logdir=./train_model/training/tensorboard`命令来查看tensorboard。*
 
 
@@ -249,7 +255,9 @@ bash ./run.sh
 ```python
   python ./infer_model/inference.py
 ```
+
 ![pipe](assets/Unet_simplify.onnx.png)
+
 同样，在你运行`./infer_model/inference.py`之前，请先配置`./infer_model/infer_config.yaml`文件，配置文件如下所示。
 ```yaml
 # -------------------- base config --------------------
