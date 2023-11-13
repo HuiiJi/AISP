@@ -7,6 +7,7 @@
 docker pull nvcr.io/nvidia/pytorch:21.08-py3
 docker run -it --gpus all -v /mnt:/mnt nvcr.io/nvidia/pytorch:21.08-py3 #/mnt为你的数据存储路径
 git clone https://github.com/HuiiJi/AISP_NR.git
+chmod -R 777 AISP_NR/
 cd AISP_NR
 ```
 > *Tips: 该项目的依赖项包括pytorch、torchvision、numpy、opencv-python、pyyaml、tensorboard、torchsummary、torchsummaryX、torch2trt、onnx、onnxruntime等，你可以通过docker pull来下载镜像images并启动容器container来完成环境配置，docker的安装请参考[官方文档](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)。*
