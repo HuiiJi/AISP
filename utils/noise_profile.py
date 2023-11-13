@@ -43,7 +43,7 @@ class Noise_Calibration(object):
         noise_model:
             noise model, should be in ['pg_model', 'pg_tl_model']
         """
-        self.root_path = Path(os.path.abspath(__file__)).parent.parent.parent
+        self.root_path = Path(os.path.abspath(__file__)).parent.parent
         self.blc = self.__get_black_level(root_path = self.root_path)
         self.wlc = 1023
         self.noise_model = 'pg_model'
@@ -68,7 +68,7 @@ class Noise_Calibration(object):
         if self.root_path not in sys.path:
             sys.path.append(self.root_path)
         assert self.noise_model in ['pg_model', 'pg_tl_model'], f'noise_model should be in [pg_model, pg_tl_model], please check it'
-        os.makedirs(self.root_path / 'Denoise' / 'IMX766'/ 'noise_params', exist_ok=True)
+        os.makedirs(self.root_path / 'IMX766'/ 'noise_params', exist_ok=True)
      
     
     def run(self) -> Dict[str, np.ndarray]:
@@ -151,8 +151,8 @@ class Noise_Calibration(object):
             root_path:
                 root path of the project
         """
-        black_img_list = sorted(os.listdir(root_path / 'Denoise' / 'IMX766' / 'black_img'))
-        img_stack = [FeedRAW(root_path / 'Denoise' / 'IMX766'/ 'black_img' / img).raw_data for img in black_img_list]
+        black_img_list = sorted(os.listdir(root_path / 'IMX766' / 'black_img'))
+        img_stack = [FeedRAW(root_path  / 'IMX766'/ 'black_img' / img).raw_data for img in black_img_list]
         black_level = float(np.stack(img_stack, axis=0).mean())
         return black_level
      
@@ -173,8 +173,8 @@ class Noise_Calibration(object):
         """
         assert sensor_config in ['IMX766', 'IMX766TL'], f'sensor_config should be in [IMX766, IMX766TL], please check it'
         assert isinstance(root_path, Path), f'root_path should be Path type, please check it'
-        calibration_img_list = sorted(os.listdir(root_path / 'Denoise' / 'IMX766'/ 'calibrate_img'))
-        img_stack = [FeedRAW(root_path / 'Denoise' / 'IMX766'/ 'calibrate_img' / img).raw_data for img in calibration_img_list]
+        calibration_img_list = sorted(os.listdir(root_path / 'IMX766'/ 'calibrate_img'))
+        img_stack = [FeedRAW(root_path / 'IMX766'/ 'calibrate_img' / img).raw_data for img in calibration_img_list]
         img_stack_id = [(os.path.basename(img).split('.')[0]) for img in calibration_img_list]
         img_stack_normalization = [normalization(inputs = img, black_level = blc, white_level = wlc) for img in img_stack]
         roi_list = self.__get_roi_list()
@@ -194,7 +194,7 @@ class Noise_Calibration(object):
             var = np.asarray(var_list)
             del mean_list, var_list
             plsq = leastsq(self.__error, [0.1, 0.01], args=(mu, var))[0]
-            noise_params_path = self.root_path / 'Denoise' / 'IMX766' /'noise_params'
+            noise_params_path = self.root_path / 'IMX766' /'noise_params'
             self.__plt_show(image_id, mu, var, plsq, noise_params_path)
             shot_noise_list.append(plsq[0])
             read_noise_list.append(abs(plsq[1]))
