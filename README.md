@@ -127,7 +127,7 @@ AI降噪模型开发的第一步也是非常重要的一步，数据采集，训
 ```python
 python utils/make_dataset.py
 ```
-> * 运行code后生成如下LMDB文件，即为训练集的LMDB文件，位于`./train_data/.mdb`下。
+> * 运行code后生成如下LMDB文件，即为训练集的LMDB文件，位于`./train_data/.mdb`下，需预留约20GB的存储空间。
 > * 运行code后同时生成训练集和验证集的ID文件，位于`./train_data/valid_data_idx.txt`下。
 > * 训练时，通过ID文件读取训练集LMDB和验证集的数据。
 
