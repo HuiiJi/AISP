@@ -161,7 +161,9 @@ AI降噪模型来源可以通过历年的NTIRE竞赛或者图像视觉会议（�
   - *训练可以选择一些已经被验证有效的学习率策略（如warmup）。*
 - ##### 自研模型的结构
 基于以上经验，可以参考一些Unet类的结构来设计模型，基本组件为ResnetBlock2D和SelfAttnBlock2D，其中SelfAttnBlock2D选择Transformer来实现注意力模块，ResnetBlock2D选择C+R和residual等结构，详细的模型结构如下图所示。其中模型的源码位于`./model_zoo/My_network.py`下，该模型结构仅供参考。
+
 ![network](assets/My_network.jpg)
+
  > *Tips：针对2D NR可以考虑设置超参模式来控制去噪强度如（FFDNet系列），如将ISO作为先验输入network进行处理以实现非盲去噪（可以参考Stable diffusion的Unet设计ResnetBlock2D）。*
 - ##### 典型模型的参数
   |Model|PSNR| SSIM| Macs|
