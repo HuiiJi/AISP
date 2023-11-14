@@ -1,7 +1,7 @@
 # AISP_NR:  2D AI-Noise Reduction for RAW Images
 ![pipe](assets/pipe.png)
 ## 介绍
-这是一个关于AISP模块：Noise Reduction 的工程实现文档，针对目标camera如（sensor：IMX766）梳理AI降噪的实现流程，该项目包含：数据准备、模型设计、模型训练、模型压缩、模型推理等。请先确保安装该项目的依赖项，通过git clone下载该项目，然后在该项目的根目录下执行以下命令安装依赖项。
+这是一个关于AI-ISP模块：Noise Reduction 的工程实现文档，针对目标camera如（sensor：IMX766）梳理AI降噪的实现流程，该项目包含：数据准备、模型设计、模型训练、模型压缩、模型推理等。请先确保安装该项目的依赖项，通过git clone下载该项目，然后在该项目的根目录下执行以下命令安装依赖项。
 
 ```shell
 docker pull huiiji/ubuntu_torch1.13_python3.8:latest  #docker images约20G，请耐心下载
@@ -59,7 +59,7 @@ AI降噪模型开发的第一步也是非常重要的一步，数据采集，训
 > *Tips：实拍开源数据集可以作为benchmark来测试AI model的降噪表现，但一般不直接用于训练集的构建。*
 
 #### 1.2 依据噪声模型合成匹配数据
-这里是一些关于RAW-domain噪声模型的开源项目，你可以从这些介绍中了解更多关于噪声模型的知识。
+这里是一些关于RAW domain噪声模型的开源项目，你可以从这些介绍中了解更多关于噪声模型的知识。
 
  | Paper| Code|Noise Model |Year&lab|
  |:----:|:----:|:-------:|:-------:|
@@ -295,9 +295,9 @@ forward_engine: 'trt'  ## must be in ['trt', 'onnx', 'torch']
 > *Tips: 降噪后的图像质量有提高的空间，如降低图像的涂抹感，保持局部纹理一致性，恢复部分细节等，该部分trick可以通过对训练集进行增强或更改训练策略来实现，该文档不进一步讨论。*
 
 ## 后记
-- AISP的用途是逐步取代传统ISP链条上一些难以优化的模块如NR、HDR，以实现人眼观感提升或机器视觉指标的特定优化。
-- 当前主流的方案是用AISP和传统算法共同作用于一个模块来保证其稳定性，也有一些paper希望用一个Network来实现整个ISP Pipe的替代，但目前还存在无法合理tuning及不稳定等缺陷。
-- AISP model的应用通常是针对特定嵌入式硬件来将PC端侧的推理框架（如torch、tensorflow）转为平台自研的推理框架来实现OP的一一映射，中间可以会存在某些OP的优化和改写以实现良好的部署效果，所以也能接触一些硬件架构学习和部署相关的概念，个人认为有良好的学习前景，共勉！
+- AI-ISP的用途是逐步取代传统ISP链条上一些难以优化的模块如NR、HDR，以实现人眼观感提升或机器视觉指标的特定优化。
+- 当前主流的方案是用AI-ISP和传统算法共同作用于一个模块来保证其稳定性，也有一些paper希望用一个Network来实现整个ISP Pipe的替代，但目前还存在无法合理tuning及不稳定等缺陷。
+- AI-ISP model的应用通常是针对特定嵌入式硬件来将PC端侧的推理框架（如torch、tensorflow）转为平台自研的推理框架来实现OP的一一映射，中间可以会存在某些OP的优化和改写以实现良好的部署效果，所以也能接触一些硬件架构学习和部署相关的概念，个人认为有良好的学习前景，共勉！
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
