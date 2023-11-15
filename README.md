@@ -113,7 +113,7 @@ AI降噪模型开发的第一步也是非常重要的一步，数据采集，训
     - 用开源数据集中的GT作标签，但需要对一些脏数据做一些传统滤波处理，本文采取该方式进行标签图像采集，完整数据链接请参考`./IMX766/data_here.txt`的内容进行下载。
 
 - ##### 应用噪声模型
-应用噪声模型时需注意ISO是可调的超参，尽可能广泛选取大范围的ISO来模拟高动态的噪声分布（如ISO100~6400）。
+应用噪声模型时需注意ISO是可调的超参，尽可能广泛选取大范围的ISO来模拟高动态的噪声分布，如ISO范围可以选取100~6400。
 
 ![pipe](assets/noise1.jpg)
 ![pipe](assets/noise2.jpg)
@@ -234,7 +234,7 @@ bash ./run.sh
 对验证集进行测试来评估训练表现，code包含在`./train_model/train.py`中，会在训练自动启动验证。
 - 权重会保存在`./train_model/training/checkpoints`文件夹下，其中`xx_best.pth`为最优权重，`xx_last.pth`为最后一次训练的权重，默认不保存最后一次训练权重。
 - log会保存在`./train_model/training/log`文件夹下，打印详细的时间、训练step和loss等，如下图所示。
-- 
+  
 ![pipe](assets/log.jpg)
 
 - tensorboard文件会保存在`./train_model/training/tensorboard`文件夹下，存储loss/iteration、PSNR、SSIM等验证时状态，如下图所示。
