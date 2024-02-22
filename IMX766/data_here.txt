@@ -1,5 +1,7 @@
-链接：https://pan.baidu.com/s/1-mVCEkWApzY96Q-unbAz1g?pwd=0203 
-提取码：0203
+
+链接：https://pan.baidu.com/s/1vJIva6tX60kCVDpjrmGRvA?pwd=0203 
+提取码：0203 
+--来自百度网盘超级会员V3的分享
 
 下载IMX766的训练数据，并放置在/IMX766/下，文件树参考如下。
 ├── assets
